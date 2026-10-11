@@ -6,8 +6,8 @@ app = Flask(__name__)
 # Configure your local MySQL connection
 DB_CONFIG = {
     'host': 'localhost',
-    'user': 'vendor_admin',       # Updated username
-    'password': 'senha123',       # Updated password
+    'user': 'root',       # Updated username
+    'password': '',       # Updated password
     'database': 'street_vendor_db',
     'cursorclass': pymysql.cursors.DictCursor
 }
