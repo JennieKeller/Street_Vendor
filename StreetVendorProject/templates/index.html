@@ -110,3 +110,51 @@
 
 </body>
 </html>
+
+<!-- Expense Registration Form Card -->
+    <div class="card">
+        <h2>Registrar Nova Despesa</h2>
+        <form id="form-despesa">
+            <label for="descricao">Descrição (ex: Compra de Leite Condensado):</label>
+            <input type="text" id="descricao" placeholder="Ex: Chocolate e embalagens" required>
+
+            <label for="valor_despesa">Valor (R$):</label>
+            <input type="number" step="0.01" id="valor_despesa" placeholder="Ex: 45.50" required>
+
+            <label for="data_despesa">Data:</label>
+            <input type="date" id="data_despesa" required>
+
+            <button type="submit" style="background: #e67e22;">Salvar Despesa</button>
+        </form>
+        <p id="mensagem-despesa" class="success"></p>
+    </div>
+    // Set today's date automatically in the expense date field
+        document.getElementById('data_despesa').valueAsDate = new Date();
+
+        // Handle expense form submission
+        document.getElementById('form-despesa').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const dadosDespesa = {
+                descricao: document.getElementById('descricao').value,
+                valor: parseFloat(document.getElementById('valor_despesa').value),
+                data: document.getElementById('data_despesa').value
+            };
+
+            fetch('/despesas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosDespesa)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mensagem-despesa').textContent = data.message || "Despesa salva com sucesso!";
+                document.getElementById('form-despesa').reset();
+                document.getElementById('data_despesa').valueAsDate = new Date(); // Reset date to today
+                setTimeout(() => { document.getElementById('mensagem-despesa').textContent = ''; }, 4000);
+            })
+            .catch(err => {
+                console.error('Erro:', err);
+                alert('Erro ao registrar despesa.');
+            });
+        });
