@@ -12,14 +12,16 @@
         input, select { padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
         button { padding: 10px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
         button:hover { background: #219653; }
+        .btn-despesa { background: #e67e22; }
+        .btn-despesa:hover { background: #d35400; }
         .success { color: green; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <h1>Painel de Controle da Lojinha 🍬</h1>
+    <h1>Painel de Controle da Doçaria 🍬</h1>
 
-    <!-- Registration Form Card -->
+    <!-- 1. Registration Form Card: Sales -->
     <div class="card">
         <h2>Registrar Nova Venda</h2>
         <form id="form-venda">
@@ -47,14 +49,32 @@
         <p id="mensagem-sucesso" class="success"></p>
     </div>
 
-    <!-- Pending Sales List Card -->
+    <!-- 2. Registration Form Card: Expenses -->
+    <div class="card">
+        <h2>Registrar Nova Despesa</h2>
+        <form id="form-despesa">
+            <label for="descricao">Descrição (ex: Compra de Leite Condensado):</label>
+            <input type="text" id="descricao" placeholder="Ex: Chocolate e embalagens" required>
+
+            <label for="valor_despesa">Valor (R$):</label>
+            <input type="number" step="0.01" id="valor_despesa" placeholder="Ex: 45.50" required>
+
+            <label for="data_despesa">Data:</label>
+            <input type="date" id="data_despesa" required>
+
+            <button type="submit" class="btn-despesa">Salvar Despesa</button>
+        </form>
+        <p id="mensagem-despesa" class="success"></p>
+    </div>
+
+    <!-- 3. Pending Sales List Card -->
     <div class="card">
         <h2>Fiados Pendentes</h2>
         <ul id="lista-fiados">Carregando...</ul>
     </div>
 
     <script>
-        // Function to load pending sales
+        // Function to load pending sales dynamically
         function carregarFiados() {
             fetch('/vendas/pendentes')
                 .then(response => response.json())
@@ -74,7 +94,7 @@
                 .catch(err => console.error('Erro ao carregar fiados:', err));
         }
 
-        // Handle form submission via JavaScript (Fetch API)
+        // Handle sale form submission via Fetch API
         document.getElementById('form-venda').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -104,35 +124,10 @@
             });
         });
 
-        // Load list on page start
-        carregarFiados();
-    </script>
-
-</body>
-</html>
-
-<!-- Expense Registration Form Card -->
-    <div class="card">
-        <h2>Registrar Nova Despesa</h2>
-        <form id="form-despesa">
-            <label for="descricao">Descrição (ex: Compra de Leite Condensado):</label>
-            <input type="text" id="descricao" placeholder="Ex: Chocolate e embalagens" required>
-
-            <label for="valor_despesa">Valor (R$):</label>
-            <input type="number" step="0.01" id="valor_despesa" placeholder="Ex: 45.50" required>
-
-            <label for="data_despesa">Data:</label>
-            <input type="date" id="data_despesa" required>
-
-            <button type="submit" style="background: #e67e22;">Salvar Despesa</button>
-        </form>
-        <p id="mensagem-despesa" class="success"></p>
-    </div>
-    
-    // Set today's date automatically in the expense date field
+        // Set today's date automatically in the expense date field
         document.getElementById('data_despesa').valueAsDate = new Date();
 
-        // Handle expense form submission
+        // Handle expense form submission via Fetch API
         document.getElementById('form-despesa').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -159,3 +154,10 @@
                 alert('Erro ao registrar despesa.');
             });
         });
+
+        // Initial load on page startup
+        carregarFiados();
+    </script>
+
+</body>
+</html>
