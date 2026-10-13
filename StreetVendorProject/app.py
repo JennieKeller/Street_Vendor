@@ -3,7 +3,7 @@ import pymysql
 
 app = Flask(__name__)
 
-# Configure your local MySQL connection
+# Configure local MySQL connection
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',       # Updated username
@@ -15,16 +15,13 @@ DB_CONFIG = {
 def get_db_connection():
     return pymysql.connect(**DB_CONFIG)
 
-# ==========================================
-# HOME ROUTE (Serves the Frontend Dashboard)
-# ==========================================
+# HOME ROUTE
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# ==========================================
 # GET ENDPOINTS (Read Operations)
-# ==========================================
 
 # 1. Calculate Production Cost for a specific Product
 @app.route('/produtos/<int:produto_id>/custo', methods=['GET'])
@@ -53,7 +50,7 @@ def calcular_custo(produto_id):
     finally:
         connection.close()
 
-# 2. List all Pending Payments ("Fiados")
+# 2. List all Pending Payments
 @app.route('/vendas/pendentes', methods=['GET'])
 def listar_fiados():
     connection = get_db_connection()
@@ -77,9 +74,7 @@ def listar_fiados():
     finally:
         connection.close()
 
-# ==========================================
-# POST ENDPOINTS (Write Operations - Step 1)
-# ==========================================
+# POST ENDPOINTS
 
 # 3. Register a New Sale
 @app.route('/vendas', methods=['POST'])
@@ -132,8 +127,8 @@ def registrar_despesa():
         connection.close()
 
 
-# ==========================================
+
 # RUN SERVER
-# ==========================================
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
